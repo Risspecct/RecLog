@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from app.services.hotspot_service import (get_all_hotspots, get_hotspot_by_id)
-from app.models.hotspot import HotspotResponse
+from app.services.hotspot_service import (get_hotspot_summaries, get_hotspot_by_id)
+from app.models.hotspot import (HotspotSummaryResponse, HotspotDetailResponse)
 
 router = APIRouter(
     prefix="/hotspots",
@@ -10,14 +10,14 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[HotspotResponse])
+@router.get("", response_model=list[HotspotSummaryResponse])
 def get_hotspots(limit: int = 50, offset: int = 0):
-    return get_all_hotspots(limit=limit, offset=offset)
+    return get_hotspot_summaries(limit=limit, offset=offset)
 
 
 @router.get(
     "/{h3_cell}",
-    response_model=HotspotResponse
+    response_model=HotspotDetailResponse
 )
 def get_hotspot_details(h3_cell: str):
     hotspot = get_hotspot_by_id(h3_cell)

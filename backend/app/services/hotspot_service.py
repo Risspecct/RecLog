@@ -1,11 +1,23 @@
 from app.services.data_service import get_dataset
 
 
-def get_all_hotspots(limit: int = 50, offset: int = 0):
+def get_hotspot_summaries(limit: int = 50, offset: int = 0):
     df = get_dataset()
 
+    summary_columns = [
+        "h3_cell",
+        "hotspot_name",
+        "center_lat",
+        "center_lon",
+        "PCRI",
+        "priority_score",
+        "confidence",
+        "enforcement_tier"
+    ]
+
     return (
-        df.iloc[offset: offset + limit]
+        df[summary_columns]
+        .iloc[offset: offset + limit]
         .to_dict(orient="records")
     )
 
