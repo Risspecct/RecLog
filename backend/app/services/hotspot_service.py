@@ -1,5 +1,5 @@
 from app.services.data_service import get_dataset
-from app.util.enums import EnforcementTier
+from app.models.enums import EnforcementTier
 
 
 def get_hotspot_summaries(limit: int = 50, offset: int = 0, tier: EnforcementTier | None = None):
