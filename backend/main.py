@@ -3,6 +3,7 @@ import logging
 
 from app.services.data_service import load_dataset
 from app.routes.hotspots import router as hotspot_router
+from app.routes.dashboard import router as dashboard_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,6 +18,7 @@ app = FastAPI(
 )
 
 app.include_router(hotspot_router)
+app.include_router(dashboard_router)
 
 
 @app.on_event("startup")
