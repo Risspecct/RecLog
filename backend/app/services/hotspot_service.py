@@ -1,8 +1,12 @@
 from app.services.data_service import get_dataset
+from app.util.tiers import EnforcementTier
 
 
-def get_hotspot_summaries(limit: int = 50, offset: int = 0):
+def get_hotspot_summaries(limit: int = 50, offset: int = 0, tier: EnforcementTier | None = None):
     df = get_dataset()
+
+    if tier:
+        df = df[df["enforcement_tier"] == tier.value]
 
     summary_columns = [
         "h3_cell",
