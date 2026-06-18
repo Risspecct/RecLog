@@ -3,7 +3,7 @@ from fastapi import HTTPException
 
 from app.services.hotspot_service import (get_hotspot_summaries, get_hotspot_by_id)
 from app.models.hotspot import (HotspotSummaryResponse, HotspotDetailResponse)
-from app.util.tiers import EnforcementTier
+from app.util.enums import EnforcementTier
 
 router = APIRouter(
     prefix="/hotspots",
