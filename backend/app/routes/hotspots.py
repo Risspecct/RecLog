@@ -9,5 +9,6 @@ router = APIRouter(
 
 
 @router.get("")
-def get_hotspots():
-    return get_all_hotspots()
+def get_hotspots(limit: int = 50, offset: int = 0):
+
+    return get_all_hotspots(limit=limit, offset=offset)
