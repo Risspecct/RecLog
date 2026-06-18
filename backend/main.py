@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 import logging
 
-from app.services.data_services import load_dataset
+from app.services.data_service import load_dataset
+from app.routes.hotspots import router as hotspot_router
 
 logging.basicConfig(
     level=logging.INFO,
@@ -14,6 +15,8 @@ app = FastAPI(
     title="RecLog API",
     version="1.0.0"
 )
+
+app.include_router(hotspot_router)
 
 
 @app.on_event("startup")
