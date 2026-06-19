@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.models.analytics import RootCauseDistributionResponse, EnforcementTierResponse, DashboardInsightsResponse
-from app.services.analytics_service import get_root_cause_distribution, get_enforcement_tier_distribution, get_dashboard_insights, get_hotspots_by_root_cause
+from app.models.analytics import RootCauseDistributionResponse, EnforcementTierResponse, DashboardInsightsResponse, RecommendationResponse
+from app.services.analytics_service import get_root_cause_distribution, get_enforcement_tier_distribution, get_dashboard_insights, get_hotspots_by_root_cause, get_recommendations
 from app.models.hotspot import HotspotSummaryResponse
 from app.models.enums import RootCause
 
@@ -29,3 +29,8 @@ def dashboard_insights():
 @router.get("/root-causes/{root_cause}", response_model=list[HotspotSummaryResponse])
 def hotspots_by_root_cause(root_cause: RootCause, limit: int = 50):
     return get_hotspots_by_root_cause(root_cause=root_cause, limit=limit)
+
+
+@router.get("/recommendations", response_model=list[RecommendationResponse])
+def recommendations():
+    return get_recommendations()

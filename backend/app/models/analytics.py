@@ -23,3 +23,8 @@ class DashboardInsightsResponse(BaseModel):
     most_common_violation: str
 
     avg_pcri: float
+
+
+class RecommendationResponse(BaseModel):
+    root_cause: str
+    recommendation: str

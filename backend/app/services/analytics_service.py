@@ -75,3 +75,15 @@ def get_hotspots_by_root_cause(root_cause: RootCause, limit: int = 50):
         .head(limit)
         .to_dict(orient="records")
     )
+
+
+def get_recommendations():
+
+    df = get_dataset()
+
+    recommendations = (df[["root_cause", "recommendation"]]
+                       .drop_duplicates()
+                       .sort_values("root_cause")
+                       )
+
+    return recommendations.to_dict(orient="records")
