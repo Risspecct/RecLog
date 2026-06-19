@@ -55,3 +55,19 @@ def get_critical_hotspots():
 
     critical = df[df["enforcement_tier"] == EnforcementTier.CRITICAL.value]
     return critical.to_dict(orient="records")
+
+
+def search_hotspots(query: str, limit: int = 20):
+    df = get_dataset()
+
+    query = query.strip().lower()
+    results = df[df["hotspot_name"]
+                 .str.lower()
+                 .str.contains(query, na=False)]
+
+    return (
+        results
+        .sort_values("priority_score", ascending=False)
+        .head(limit)
+        .to_dict(orient="records")
+    )

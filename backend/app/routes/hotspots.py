@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from app.services.hotspot_service import (get_hotspot_summaries, get_hotspot_by_id, get_critical_hotspots, get_top_priority_hotspots)
+from app.services.hotspot_service import (get_hotspot_summaries, get_hotspot_by_id, get_critical_hotspots, get_top_priority_hotspots, search_hotspots)
 from app.models.hotspot import (HotspotSummaryResponse, HotspotDetailResponse)
 from app.models.enums import EnforcementTier
 
@@ -21,10 +21,12 @@ def critical_hotspots():
     return get_critical_hotspots()
 
 
-@router.get(
-    "/top-priority",
-    response_model=list[HotspotSummaryResponse]
-)
+@router.get("/search", response_model=list[HotspotSummaryResponse])
+def search(q: str, limit: int = 20):
+    return search_hotspots(query=q, limit=limit)
+
+
+@router.get("/top-priority", response_model=list[HotspotSummaryResponse])
 def top_priority(limit: int = 20):
     return get_top_priority_hotspots(limit)
 
