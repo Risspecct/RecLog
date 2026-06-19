@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.services.data_service import load_dataset
 from app.routes.hotspots import router as hotspot_router
@@ -16,6 +17,13 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="RecLog API",
     version="1.0.0"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(hotspot_router)
