@@ -1,58 +1,50 @@
-import { useEffect, useState } from "react";
-import api from "../services/api";
+function RecommendationCard({
+  location,
+  pcri,
+  confidence,
+ officers,
+ reduction
+}) {
 
-function RecommendationCard(){
+return (
 
-const [recommendations,setRecommendations]=useState([]);
+<div className="bg-white rounded-3xl shadow-md p-6">
 
-useEffect(()=>{
-
-api.get("/analytics/recommendations")
-.then((response)=>{
-
-setRecommendations(response.data);
-
-})
-.catch(console.log);
-
-},[]);
-
-return(
-
-<div className="bg-white rounded-3xl shadow-sm p-8">
-
-<h2 className="text-xl font-semibold mb-6">
-Recommendations
+<h2 className="font-bold text-xl text-slate-800">
+{location}
 </h2>
 
-<div className="space-y-5">
+<p className="mt-3 text-gray-500">
+PCRI : {pcri}
+</p>
 
-{
+<p className="text-gray-500">
+Confidence : {confidence}%
+</p>
 
-recommendations.slice(0,4).map((item,index)=>(
+<div className="mt-5">
 
-<div
-key={index}
-className="border-l-4 border-indigo-500 pl-4"
->
+<p className="font-semibold">
+Recommended Deployment
+</p>
 
-<h3 className="font-semibold text-slate-800">
-
-{item.root_cause}
-
-</h3>
-
-<p className="text-slate-500 mt-1">
-
-{item.recommendation}
-
+<p>
+{officers} officers
 </p>
 
 </div>
 
-))
+<div className="mt-5">
 
-}
+<p className="text-green-600 font-bold">
+
+Expected Reduction
+
+</p>
+
+<p>
+{reduction}%
+</p>
 
 </div>
 

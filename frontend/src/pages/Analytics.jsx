@@ -1,8 +1,6 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-
-import RootCauseChart from "../components/RootCauseChart";
-import RecommendationCard from "../components/RecommendationCard";
+import HeatZoneCard from "../components/HeatZoneCard";
 
 function Analytics(){
 
@@ -16,11 +14,22 @@ return(
 
 <Navbar/>
 
-<div className="grid grid-cols-2 gap-8 mt-10">
+<div className="grid grid-cols-3 gap-8 mt-10">
 
-<RootCauseChart/>
+<HeatZoneCard
+area="KR Puram"
+level="Extreme"
+/>
 
-<RecommendationCard/>
+<HeatZoneCard
+area="Marathahalli"
+level="High"
+/>
+
+<HeatZoneCard
+area="Gandhi Nagar"
+level="Critical"
+/>
 
 </div>
 

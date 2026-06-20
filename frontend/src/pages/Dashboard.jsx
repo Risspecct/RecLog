@@ -8,7 +8,8 @@ import TrafficChart from "../components/TrafficChart";
 import RootCauseChart from "../components/RootCauseChart";
 import TopHotspotsTable from "../components/TopHotspotsTable";
 import RecommendationCard from "../components/RecommendationCard";
-
+import RiskMeter from "../components/RiskMeter";
+import IncidentTimeline from "../components/IncidentTimeline";
 
 function Dashboard() {
 
@@ -93,6 +94,12 @@ function Dashboard() {
                     <RootCauseChart />
 
                 </div>
+                <div className="mt-10">
+                    <RiskMeter/>
+                </div>
+                <div className="mt-10">
+                    <IncidentTimeline/>
+                </div>
 
 
                 {/* Table Section */}
@@ -102,11 +109,35 @@ function Dashboard() {
                     <TopHotspotsTable />
 
                 </div>
-                
+               
                 {/* Recommendations Section */}
-                <div className="mt-10">
+               <div className="grid grid-cols-3 gap-8 mt-10">
 
-                    <RecommendationCard />
+                    <RecommendationCard
+                        location="KR Puram"
+                        pcri="52.3"
+                        confidence="92"
+                        officers="7"
+                        reduction="15"
+                    />
+                    <RecommendationCard
+                        location="Gandhi Nagar"
+                         pcri="47.2"
+                         confidence="89"
+                         officers="5"
+                         reduction="11"
+                    />
+
+
+
+
+                     <RecommendationCard
+                         location="Marathahalli"
+                         pcri="50.1"
+                        confidence="86"
+                        officers="6"
+                        reduction="14"
+                     />
 
                 </div>
             </div>
