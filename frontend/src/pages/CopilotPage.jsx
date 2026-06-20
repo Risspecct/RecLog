@@ -94,9 +94,19 @@ Generating...
 
 answer &&
 
-<div className="bg-slate-50 rounded-2xl p-8 mt-10 whitespace-pre-wrap">
+<div className="bg-slate-50 rounded-3xl p-8 mt-10 shadow-sm">
+
+<h1 className="text-2xl font-bold mb-5">
+
+Generated Deployment Plan
+
+</h1>
+
+<div className="whitespace-pre-wrap leading-8 text-gray-700">
 
 {answer}
+
+</div>
 
 </div>
 
