@@ -1,70 +1,114 @@
-import { useState } from "react";
 import Sidebar from "../components/Sidebar";
+import Navbar from "../components/Navbar";
+import api from "../services/api";
+import { useState } from "react";
 
-function CopilotPage() {
+function CopilotPage(){
 
-  const [answer, setAnswer] = useState("");
+const [query,setQuery]=useState("");
+const [answer,setAnswer]=useState("");
+const [loading,setLoading]=useState(false);
 
-  function generate() {
+async function generate(){
 
-    setAnswer(`
-1. KR Puram
+setLoading(true);
 
-Deploy 8 officers
+try{
 
-Reason:
-Highest PCRI
+const response = await api.post(
+"/copilot",
+{
+query
+}
+);
 
-Expected reduction:
-18%
+setAnswer(response.data.answer);
 
-2. Gandhi Nagar
+}
 
-Deploy 5 officers
+catch(err){
 
-Expected reduction:
-11%
-`);
+console.log(err);
 
-  }
+}
 
-  return (
+setLoading(false);
 
-    <div className="bg-slate-100 min-h-screen">
+}
 
-      <Sidebar />
+return(
 
-      <div className="ml-64 p-10">
+<div className="bg-slate-100 min-h-screen">
 
-        <h1 className="text-4xl font-bold mb-10">
-          AI Copilot
-        </h1>
+<Sidebar/>
 
-        <div className="bg-white rounded-3xl p-10 shadow-sm">
+<div className="ml-64 p-10">
 
-          <textarea
-            className="border w-full p-5 h-40 rounded-xl"
-            placeholder="I have 20 officers and 5 tow trucks. Where should I deploy them?"
-          />
+<Navbar/>
 
-          <button
-            onClick={generate}
-            className="bg-indigo-600 text-white px-6 py-3 rounded-xl mt-6"
-          >
-            Generate Plan
-          </button>
+<div className="bg-white p-10 rounded-3xl shadow-md mt-10">
 
-          <pre className="mt-8 whitespace-pre-wrap">
-            {answer}
-          </pre>
+<h1 className="text-3xl font-bold mb-8">
 
-        </div>
+AI Traffic Copilot
 
-      </div>
+</h1>
 
-    </div>
+<textarea
 
-  );
+className="w-full border rounded-2xl p-5 h-40"
+
+placeholder="I have 25 officers and 5 tow trucks. Where should I deploy?"
+
+value={query}
+
+onChange={(e)=>setQuery(e.target.value)}
+
+/>
+
+<button
+
+onClick={generate}
+
+className="bg-indigo-600 text-white px-8 py-4 rounded-2xl mt-6"
+
+>
+
+Generate Deployment Plan
+
+</button>
+
+{
+
+loading &&
+
+<div className="mt-6">
+
+Generating...
+
+</div>
+
+}
+
+{
+
+answer &&
+
+<div className="bg-slate-50 rounded-2xl p-8 mt-10 whitespace-pre-wrap">
+
+{answer}
+
+</div>
+
+}
+
+</div>
+
+</div>
+
+</div>
+
+)
 
 }
 
