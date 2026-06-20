@@ -1,37 +1,42 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+
 import {
-  PieChart,
-  Pie,
-  Tooltip,
-  Cell
+PieChart,
+Pie,
+Cell,
+Tooltip
 } from "recharts";
 
-const data = [
-  {
-    name:"Demand Overflow",
-    value:35
-  },
-  {
-    name:"Road Capacity",
-    value:20
-  },
-  {
-    name:"Heavy Vehicle",
-    value:25
-  },
-  {
-    name:"General Parking",
-    value:20
-  }
-];
-
 const COLORS = [
-"#4F46E5",
+"#6366F1",
 "#10B981",
 "#F59E0B",
 "#EF4444"
 ];
 
 function RootCauseChart(){
+
+const [data,setData]=useState([]);
+
+useEffect(()=>{
+
+api.get("/analytics/root-causes")
+.then((response)=>{
+
+const formatted=response.data.map((item)=>({
+
+name:item.root_cause,
+value:item.count
+
+}));
+
+setData(formatted);
+
+})
+.catch(console.log);
+
+},[]);
 
 return(
 
@@ -55,7 +60,7 @@ data.map((entry,index)=>(
 
 <Cell
 key={index}
-fill={COLORS[index]}
+fill={COLORS[index%4]}
 />
 
 ))

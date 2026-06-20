@@ -7,6 +7,8 @@ import SummaryCard from "../components/SummaryCard";
 import TrafficChart from "../components/TrafficChart";
 import RootCauseChart from "../components/RootCauseChart";
 import TopHotspotsTable from "../components/TopHotspotsTable";
+import RecommendationCard from "../components/RecommendationCard";
+
 
 function Dashboard() {
 
@@ -100,7 +102,13 @@ function Dashboard() {
                     <TopHotspotsTable />
 
                 </div>
+                
+                {/* Recommendations Section */}
+                <div className="mt-10">
 
+                    <RecommendationCard />
+
+                </div>
             </div>
 
         </div>

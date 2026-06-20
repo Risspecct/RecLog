@@ -1,54 +1,69 @@
 import {
-  LayoutDashboard,
-  MapPinned,
-  BarChart3
+LayoutDashboard,
+MapPinned,
+Bot,
+Shield,
+Gauge
 } from "lucide-react";
 
-function Sidebar() {
+import { Link } from "react-router-dom";
 
-  return (
-    <div className="w-64 h-screen bg-slate-900 text-white fixed">
+function Sidebar(){
 
-      <div className="p-8 border-b border-slate-700">
+return(
 
-        <h1 className="text-2xl font-bold">
-          RecLog
-        </h1>
+<div className="w-64 h-screen bg-slate-900 text-white fixed">
 
-        <p className="text-slate-400 text-sm mt-1">
-          Traffic Intelligence Platform
-        </p>
+<div className="p-8 border-b border-slate-700">
 
-      </div>
+<h1 className="text-2xl font-bold">
+RecLog
+</h1>
 
-      <div className="mt-10 space-y-3 px-5">
+<p className="text-slate-400 text-sm mt-1">
+Traffic Intelligence Platform
+</p>
 
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 cursor-pointer">
+</div>
 
-          <LayoutDashboard size={20}/>
-          Dashboard
+<div className="mt-10 px-5 space-y-3">
 
-        </div>
+<Link to="/" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <LayoutDashboard size={20}/>
+  Dashboard
+</Link>
 
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 cursor-pointer">
+<Link to="/hotspots" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <MapPinned size={20}/>
+  Hotspots
+</Link>
 
-          <MapPinned size={20}/>
-          Hotspots
+<Link to="/map" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <MapPinned size={20}/>
+  Hotspot Map
+</Link>
 
-        </div>
+<Link to="/copilot" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <Bot size={20}/>
+  AI Copilot
+</Link>
 
-        <div className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800 cursor-pointer">
+<Link to="/deployment" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <Shield size={20}/>
+  Deployment Engine
+</Link>
 
-          <BarChart3 size={20}/>
-          Analytics
+<Link to="/simulator" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
+  <Gauge size={20}/>
+  Impact Simulator
+</Link>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-    </div>
-  )
+)
 
 }
 
-export default Sidebar
+export default Sidebar;

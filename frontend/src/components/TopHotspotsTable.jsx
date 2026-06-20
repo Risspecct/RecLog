@@ -1,82 +1,96 @@
-function TopHotspotsTable(){
+import { useEffect, useState } from "react";
+import api from "../services/api";
 
-const hotspots=[
-{
-location:"Kempe Gowda Circle",
-pcri:46.9,
-tier:"Critical"
-},
-{
-location:"Koramangala",
-pcri:41,
-tier:"Critical"
-},
-{
-location:"Bellandur",
-pcri:37,
-tier:"High"
-}
-]
+function TopHotspotsTable() {
 
-return(
+  const [hotspots, setHotspots] = useState([]);
 
-<div className="bg-white rounded-3xl p-8 shadow-sm">
+  useEffect(() => {
 
-<h2 className="text-xl font-semibold mb-6">
-Top Priority Hotspots
-</h2>
+    api.get("/hotspots/top-priority?limit=5")
+      .then((response) => {
+        setHotspots(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
-<table className="w-full">
+  }, []);
 
-<thead className="text-slate-500">
+  return (
+    <div className="bg-white rounded-3xl shadow-md p-6">
 
-<tr>
+      <h2 className="text-xl font-semibold mb-5 text-gray-800">
+        Top Priority Hotspots
+      </h2>
 
-<th>Location</th>
-<th>PCRI</th>
-<th>Tier</th>
+      <div className="overflow-x-auto">
 
-</tr>
+        <table className="w-full">
 
-</thead>
+          <thead>
+            <tr className="border-b text-gray-500 text-sm">
 
-<tbody>
+              <th className="text-left pb-3">
+                Hotspot
+              </th>
 
-{
-hotspots.map((item,index)=>(
+              <th className="text-left pb-3">
+                PCRI
+              </th>
 
-<tr
-key={index}
-className="border-t h-16"
->
+              <th className="text-left pb-3">
+                Tier
+              </th>
 
-<td>{item.location}</td>
+            </tr>
+          </thead>
 
-<td>{item.pcri}</td>
+          <tbody>
 
-<td>
+            {hotspots.map((hotspot) => (
 
-<span className="bg-red-100 text-red-600 px-3 py-2 rounded-xl">
+              <tr
+                key={hotspot.h3_cell}
+                className="border-b hover:bg-gray-50"
+              >
 
-{item.tier}
+                <td className="py-4 pr-4">
 
-</span>
+                  <div className="font-medium text-gray-700">
 
-</td>
+                    {hotspot.hotspot_name.split(",")[0]}
 
-</tr>
+                  </div>
 
-))
-}
+                </td>
 
-</tbody>
+                <td className="text-gray-600">
 
-</table>
+                  {hotspot.PCRI.toFixed(2)}
 
-</div>
+                </td>
 
-)
+                <td>
 
+                  <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+                    {hotspot.enforcement_tier}
+                  </span>
+
+                </td>
+
+              </tr>
+
+            ))}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  );
 }
 
 export default TopHotspotsTable;
