@@ -1,29 +1,36 @@
 import { motion } from "framer-motion";
+import InfoTooltip from "./InfoTooltip";
 
-function SummaryCard({title,value}){
+function SummaryCard({
+  title,
+  value,
+  description
+}) {
 
-    return(
+  return (
 
-        <motion.div
-        whileHover={{y:-5}}
-        className="bg-white rounded-3xl shadow-md p-8">
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="bg-white rounded-3xl shadow-md p-8"
+    >
 
-            <p className="text-slate-500 text-sm">
+      <div className="flex items-center gap-2">
 
-                {title}
+        <p className="text-slate-500 text-sm">
+          {title}
+        </p>
 
-            </p>
+        <InfoTooltip text={description}/>
 
-            <h1 className="text-4xl font-bold mt-5 text-slate-800">
+      </div>
 
-                {value}
+      <h1 className="text-4xl font-bold mt-5 text-slate-800">
+        {value}
+      </h1>
 
-            </h1>
+    </motion.div>
 
-        </motion.div>
-
-    )
-
+  );
 }
 
-export default SummaryCard
+export default SummaryCard;

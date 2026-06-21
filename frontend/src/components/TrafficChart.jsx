@@ -1,3 +1,4 @@
+import InfoTooltip from "./InfoTooltip";
 import {
   AreaChart,
   Area,
@@ -18,11 +19,13 @@ const data = [
 
 function TrafficChart() {
   return (
-    <div className="bg-white rounded-3xl p-8 shadow-sm">
-
-      <h2 className="text-xl font-semibold mb-6">
-        Weekly Traffic Violations
-      </h2>
+    <div className="bg-white rounded-3xl shadow-sm p-8">
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-xl font-semibold">
+          Traffic Violations Over the Week
+        </h2>
+        <InfoTooltip text="This chart shows the number of traffic violations recorded each day over the past week." />
+      </div>
 
       <ResponsiveContainer width="100%" height={300}>
         <AreaChart data={data}>

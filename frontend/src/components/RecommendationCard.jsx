@@ -1,56 +1,64 @@
+import InfoTooltip from "./InfoTooltip";
+
 function RecommendationCard({
   location,
   pcri,
   confidence,
- officers,
- reduction
+  officers,
+  reduction
 }) {
 
-return (
+  return (
 
-<div className="bg-white rounded-3xl shadow-md p-6">
+    <div className="bg-white rounded-3xl shadow-md p-6">
 
-<h2 className="font-bold text-xl text-slate-800">
-{location}
-</h2>
+      <div className="flex items-center justify-between">
 
-<p className="mt-3 text-gray-500">
-PCRI : {pcri}
-</p>
+        <h2 className="font-bold text-xl text-slate-800">
+          {location}
+        </h2>
 
-<p className="text-gray-500">
-Confidence : {confidence}%
-</p>
+        <InfoTooltip
+          text="AI-generated deployment recommendation based on PCRI and expected congestion reduction."
+        />
 
-<div className="mt-5">
+      </div>
 
-<p className="font-semibold">
-Recommended Deployment
-</p>
+      <p className="mt-3 text-gray-500">
+        PCRI : {pcri}
+      </p>
 
-<p>
-{officers} officers
-</p>
+      <p className="text-gray-500">
+        Confidence : {confidence}%
+      </p>
 
-</div>
+      <div className="mt-5">
 
-<div className="mt-5">
+        <p className="font-semibold">
+          Recommended Deployment
+        </p>
 
-<p className="text-green-600 font-bold">
+        <p>
+          {officers} officers
+        </p>
 
-Expected Reduction
+      </div>
 
-</p>
+      <div className="mt-5">
 
-<p>
-{reduction}%
-</p>
+        <p className="font-bold text-green-600">
+          Expected Reduction
+        </p>
 
-</div>
+        <p>
+          {reduction}%
+        </p>
 
-</div>
+      </div>
 
-)
+    </div>
+
+  );
 
 }
 

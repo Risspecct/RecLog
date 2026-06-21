@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import InfoTooltip from "./InfoTooltip";
 
 function TopHotspotsTable() {
 
@@ -7,7 +8,8 @@ function TopHotspotsTable() {
 
   useEffect(() => {
 
-    api.get("/hotspots/top-priority?limit=5")
+    api
+      .get("/hotspots/top-priority?limit=5")
       .then((response) => {
         setHotspots(response.data);
       })
@@ -18,17 +20,31 @@ function TopHotspotsTable() {
   }, []);
 
   return (
+
     <div className="bg-white rounded-3xl shadow-md p-6">
 
-      <h2 className="text-xl font-semibold mb-5 text-gray-800">
-        Top Priority Hotspots
-      </h2>
+      {/* Header */}
+
+      <div className="flex items-center gap-3 mb-5">
+
+        <h2 className="text-xl font-semibold text-gray-800">
+          Top Priority Hotspots
+        </h2>
+
+        <InfoTooltip
+          text="Highest-risk regions ranked by Priority Congestion Risk Index (PCRI). These locations require immediate attention."
+        />
+
+      </div>
+
+      {/* Table */}
 
       <div className="overflow-x-auto">
 
         <table className="w-full">
 
           <thead>
+
             <tr className="border-b text-gray-500 text-sm">
 
               <th className="text-left pb-3">
@@ -44,6 +60,7 @@ function TopHotspotsTable() {
               </th>
 
             </tr>
+
           </thead>
 
           <tbody>
@@ -74,7 +91,9 @@ function TopHotspotsTable() {
                 <td>
 
                   <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+
                     {hotspot.enforcement_tier}
+
                   </span>
 
                 </td>
@@ -90,7 +109,9 @@ function TopHotspotsTable() {
       </div>
 
     </div>
+
   );
+
 }
 
 export default TopHotspotsTable;

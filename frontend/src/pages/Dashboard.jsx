@@ -46,46 +46,51 @@ function Dashboard() {
 
     return (
 
-        <div className="bg-slate-100 min-h-screen">
+        <div className="bg-slate-100 min-h-screen overflow-x-hidden">
 
             <Sidebar />
 
-            <div className="ml-64 p-10">
+            <div className="ml-64 p-8 overflow-x-hidden">
 
                 <Navbar />
 
-                {/* Summary Cards */}
 
-                <div className="grid grid-cols-4 gap-7 mt-10">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-7 mt-10">
+                    
 
                     <SummaryCard
                         title="Total Hotspots"
                         value={data.total_hotspots}
+                        description="Total number of traffic hotspots identified from historical patterns."
                     />
 
                     <SummaryCard
                         title="Critical Hotspots"
                         value={data.critical_hotspots}
+                        description="Regions requiring immediate intervention."
                     />
 
                     <SummaryCard
                         title="Total Violations"
                         value={data.total_violations}
+                        description="Aggregate traffic violations across Bangalore."
                     />
 
                     <SummaryCard
                         title="Average PCRI"
                         value={data.avg_pcri}
+                        description="Average Priority Congestion Risk Index."
                     />
 
                 </div>
 
 
+
                 {/* Charts Section */}
 
-                <div className="grid grid-cols-3 gap-8 mt-10">
+                <div className="grid lg:grid-cols-3 grid-cols-1 gap-8 mt-10">
 
-                    <div className="col-span-2">
+                    <div className="lg:col-span-2">
 
                         <TrafficChart />
 
@@ -95,10 +100,10 @@ function Dashboard() {
 
                 </div>
                 <div className="mt-10">
-                    <RiskMeter/>
+                    <RiskMeter />
                 </div>
                 <div className="mt-10">
-                    <IncidentTimeline/>
+                    <IncidentTimeline />
                 </div>
 
 
@@ -109,9 +114,9 @@ function Dashboard() {
                     <TopHotspotsTable />
 
                 </div>
-               
+
                 {/* Recommendations Section */}
-               <div className="grid grid-cols-3 gap-8 mt-10">
+                <div className="grid grid-cols-3 gap-8 mt-10">
 
                     <RecommendationCard
                         location="KR Puram"
@@ -122,22 +127,22 @@ function Dashboard() {
                     />
                     <RecommendationCard
                         location="Gandhi Nagar"
-                         pcri="47.2"
-                         confidence="89"
-                         officers="5"
-                         reduction="11"
+                        pcri="47.2"
+                        confidence="89"
+                        officers="5"
+                        reduction="11"
                     />
 
 
 
 
-                     <RecommendationCard
-                         location="Marathahalli"
-                         pcri="50.1"
+                    <RecommendationCard
+                        location="Marathahalli"
+                        pcri="50.1"
                         confidence="86"
                         officers="6"
                         reduction="14"
-                     />
+                    />
 
                 </div>
             </div>

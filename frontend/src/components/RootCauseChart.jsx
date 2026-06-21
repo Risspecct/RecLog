@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import InfoTooltip from "./InfoTooltip";
 
 import {
 PieChart,
@@ -42,9 +43,19 @@ return(
 
 <div className="bg-white rounded-3xl shadow-sm p-8">
 
-<h2 className="text-xl font-semibold mb-8">
+<div className="flex justify-between items-center mb-8">
+
+<h2 className="text-xl font-semibold">
+
 Root Cause Distribution
+
 </h2>
+
+<InfoTooltip
+text="Displays major factors contributing to congestion such as demand overflow, heavy vehicles, road capacity limitations and parking."
+/>
+
+</div>
 
 <PieChart width={350} height={300}>
 

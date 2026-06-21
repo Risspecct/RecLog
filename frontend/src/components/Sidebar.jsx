@@ -12,7 +12,7 @@ function Sidebar(){
 
 return(
 
-<div className="w-64 h-screen bg-slate-900 text-white fixed">
+<div className="fixed left-0 top-0 w-64 h-screen bg-slate-900 text-white z-50">
 
 <div className="p-8 border-b border-slate-700">
 
