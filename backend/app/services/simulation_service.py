@@ -259,3 +259,44 @@ def best_intervention(
             prevented
         )
     )
+
+
+def recommend_resources(
+    projected_pcri: float
+):
+
+    if projected_pcri >= 90:
+
+        return {
+            "risk_tier": "CRITICAL",
+            "officers": 6,
+            "tow_trucks": 3,
+            "patrol_interval": "15 mins"
+        }
+
+    elif projected_pcri >= 70:
+
+        return {
+            "risk_tier": "HIGH",
+            "officers": 4,
+            "tow_trucks": 2,
+            "patrol_interval": "30 mins"
+        }
+
+    elif projected_pcri >= 50:
+
+        return {
+            "risk_tier": "MEDIUM",
+            "officers": 2,
+            "tow_trucks": 1,
+            "patrol_interval": "1 hour"
+        }
+
+    else:
+
+        return {
+            "risk_tier": "LOW",
+            "officers": 1,
+            "tow_trucks": 0,
+            "patrol_interval": "4 hours"
+        }

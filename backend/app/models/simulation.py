@@ -50,3 +50,13 @@ class BestStrategyResponse(BaseModel):
     violations: int
 
     violations_prevented: int
+
+
+class ResourcePlanResponse(BaseModel):
+    risk_tier: str
+
+    officers: int
+
+    tow_trucks: int
+
+    patrol_interval: str

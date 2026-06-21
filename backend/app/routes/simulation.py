@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 
-from app.models.simulation import SimulationDashboardRequest, SimulationDashboardResponse, ScenarioResultResponse, BestStrategyResponse
-from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention
+from app.models.simulation import SimulationDashboardRequest, ScenarioResultResponse, BestStrategyResponse, ResourcePlanResponse
+from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention, recommend_resources
 
 router = APIRouter(
     prefix="/simulation",
@@ -63,4 +63,32 @@ def get_best_strategy(
 
     return best_intervention(
         dashboard
+    )
+
+
+@router.post(
+    "/resources",
+    response_model=ResourcePlanResponse
+)
+def get_resource_plan(
+    request: SimulationDashboardRequest
+):
+
+    dashboard = scenario_dashboard(
+        hotspot_name=request.hotspot_name,
+        days=request.days
+    )
+
+    if dashboard is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Hotspot not found"
+        )
+
+    best = best_intervention(
+        dashboard
+    )
+
+    return recommend_resources(
+        best.projected_pcri
     )
