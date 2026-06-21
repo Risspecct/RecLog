@@ -162,19 +162,12 @@ def compute_simulated_pcri(
 
     return {
         "PCRI": round(float(pcri), 2),
-
         "simulated_violations": int(len(df_sim)),
-
         "density": round(float(density), 2),
-
         "density_norm": round(float(density_norm), 4),
-
         "vehicle_weight_norm": round(float(vehicle_weight_norm), 4),
-
         "severity_norm": round(float(severity_norm), 4),
-
         "repeat_norm": round(float(repeat_norm), 4),
-
         "criticality_norm": round(float(criticality_norm), 4)
     }
 
@@ -191,8 +184,7 @@ def project_future_pcri(
     ) * days
 
     factor = (
-        simulated_violations /
-        expected_baseline
+        simulated_violations / expected_baseline
     )
 
     factor = max(

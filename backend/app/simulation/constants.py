@@ -69,12 +69,8 @@ SCENARIOS = {
 
 INTERVENTIONS = {
     "none": 1.00,
-
     "extra_enforcement": 0.75,
-
     "tow_truck_drive": 0.60,
-
     "temporary_parking_zone": 0.55,
-
     "traffic_diversion": 0.70
 }

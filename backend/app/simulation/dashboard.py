@@ -1,5 +1,3 @@
-import pandas as pd
-
 from app.services.data_service import (
     get_dataset
 )
@@ -41,17 +39,11 @@ def scenario_dashboard(
     )
 
     scenarios = [
-
         ("normal", "none"),
-
         ("rain", "none"),
-
         ("festival", "none"),
-
         ("festival", "extra_enforcement"),
-
         ("festival", "temporary_parking_zone"),
-
         ("festival", "traffic_diversion")
     ]
 
@@ -75,28 +67,14 @@ def scenario_dashboard(
         projected_pcri = (
             project_future_pcri(
                 current_pcri=current_pcri,
-                historical_violations=
-                    historical_violations,
-                simulated_violations=
-                    sim_result[
-                        "simulated_violations"
-                    ],
+                historical_violations=historical_violations,
+                simulated_violations=sim_result["simulated_violations"],
                 days=days
             )
         )
 
         change_pct = (
-
-            (
-                projected_pcri
-                -
-                current_pcri
-            )
-
-            /
-
-            current_pcri
-
+            (projected_pcri - current_pcri) / current_pcri
         ) * 100
 
         results.append({
