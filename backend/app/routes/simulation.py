@@ -6,6 +6,7 @@ from app.services.data_service import get_dataset
 from app.models.simulation import SimulationDashboardRequest, ScenarioResultResponse, BestStrategyResponse, ResourcePlanResponse
 from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention, recommend_resources, test_generator, test_pcri
 from app.simulation.pcri import compute_simulated_pcri
+from app.simulation.dashboard import scenario_dashboard as dashboard_scenario
 
 router = APIRouter(
     prefix="/simulation",
@@ -117,7 +118,6 @@ def test_pcri_endpoint(
     )
 
 
-
 @router.get("/test")
 def simulation_test(
     hotspot_name: str | None = None
@@ -130,21 +130,21 @@ def simulation_test(
             .iloc[0]["hotspot_name"]
         )
 
-    df_sim = simulate_hotspot(
+    dashboard = dashboard_scenario(
         hotspot_name=hotspot_name,
-        days=7,
-        scenario="festival",
-        intervention="none"
+        days=7
     )
 
-    if df_sim is None:
+    if dashboard is None:
 
         return {
             "error": "Hotspot not found"
         }
 
-    result = compute_simulated_pcri(
-        df_sim
-    )
-
-    return result
+    return {
+        "hotspot": hotspot_name,
+        "rows": len(dashboard),
+        "results": dashboard.to_dict(
+            orient="records"
+        )
+    }
