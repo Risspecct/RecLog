@@ -35,3 +35,18 @@ class ScenarioResultResponse(BaseModel):
     confidence: float
 
     violations: int
+
+
+class BestStrategyResponse(BaseModel):
+
+    best_strategy: str
+
+    projected_pcri: float
+
+    impact: str
+
+    confidence: float
+
+    violations: int
+
+    violations_prevented: int

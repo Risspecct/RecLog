@@ -1,5 +1,5 @@
 from app.services.data_service import (get_dataset, get_cluster_dataset, get_historical_scaler)
-from app.models.simulation import SimulationDashboardResponse, ScenarioResultResponse
+from app.models.simulation import SimulationDashboardResponse, ScenarioResultResponse, BestStrategyResponse
 
 
 SCENARIOS = {
@@ -197,3 +197,65 @@ def scenario_dashboard(
         )
 
     return results
+
+
+def best_intervention(
+    dashboard
+):
+    interventions = [
+
+        item
+        for item in dashboard
+        if item.intervention != "none"
+    ]
+
+    if not interventions:
+        return None
+
+    best = min(
+        interventions,
+        key=lambda x: x.projected_pcri
+    )
+
+    baseline = next(
+        (
+            item
+            for item in dashboard
+            if (
+                item.scenario == "festival"
+                and
+                item.intervention == "none"
+            )
+        ),
+        None
+    )
+
+    prevented = 0
+
+    if baseline:
+        prevented = (
+            baseline.violations
+            - best.violations
+        )
+
+    return BestStrategyResponse(
+        best_strategy=best.intervention,
+
+        projected_pcri=float(
+            best.projected_pcri
+        ),
+
+        impact=best.impact,
+
+        confidence=float(
+            best.confidence
+        ),
+
+        violations=int(
+            best.violations
+        ),
+
+        violations_prevented=int(
+            prevented
+        )
+    )
