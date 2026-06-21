@@ -100,55 +100,15 @@ def scenario_dashboard(
         ) * 100
 
         results.append({
-
-            "Scenario":
-                scenario,
-
-            "Intervention":
-                intervention,
-
-            "Projected_PCRI":
-                round(
-                    projected_pcri,
-                    2
-                ),
-
-            "Change_%":
-                round(
-                    change_pct,
-                    2
-                ),
-
-            "Impact":
-                impact_label(
-                    change_pct
-                ),
-
-            "Confidence":
-                simulation_confidence(
-                    sim_result[
-                        "simulated_violations"
-                    ]
-                ),
-
-            "Violations":
-                sim_result[
-                    "simulated_violations"
-                ]
+            "scenario": scenario,
+            "intervention": intervention,
+            "projected_pcri": round(projected_pcri, 2),
+            "change_pct": round(change_pct, 2),
+            "impact": impact_label(change_pct),
+            "confidence": simulation_confidence(
+                sim_result["simulated_violations"]
+            ),
+            "violations": sim_result["simulated_violations"]
         })
 
-    dashboard = pd.DataFrame(
-        results
-    )
-
-    dashboard = dashboard.sort_values(
-        by="Projected_PCRI",
-        ascending=False
-    )
-
-    dashboard.reset_index(
-        drop=True,
-        inplace=True
-    )
-
-    return dashboard
+    return results

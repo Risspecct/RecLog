@@ -75,62 +75,67 @@ def best_intervention(
     dashboard
 ):
 
-    interventions = dashboard[
-        dashboard["Intervention"] != "none"
-    ].copy()
+    interventions = [
 
-    if interventions.empty:
-        return None
+        row
 
-    best_idx = interventions[
-        "Projected_PCRI"
-    ].idxmin()
+        for row in dashboard
 
-    best = interventions.loc[
-        best_idx
+        if row["intervention"] != "none"
     ]
 
-    baseline = dashboard[
-        (dashboard["Scenario"] == "festival")
-        &
-        (dashboard["Intervention"] == "none")
-    ].iloc[0]
+    if not interventions:
+        return None
+
+    best = min(
+        interventions,
+        key=lambda row:
+            row["projected_pcri"]
+    )
+
+    baseline = next(
+
+        row
+
+        for row in dashboard
+
+        if (
+            row["scenario"] == "festival"
+            and
+            row["intervention"] == "none"
+        )
+    )
 
     violations_prevented = (
 
-        baseline["Violations"]
+        baseline["violations"]
 
         -
 
-        best["Violations"]
-
+        best["violations"]
     )
 
     return {
 
         "best_strategy":
-            str(
-                best["Intervention"]
-            ),
+            best["intervention"],
 
         "projected_pcri":
             float(
-                best["Projected_PCRI"]
+                best["projected_pcri"]
             ),
 
         "impact":
-            str(
-                best["Impact"]
-            ),
+            best["impact"],
 
         "confidence":
             float(
-                best["Confidence"]
+                best["confidence"]
             ),
 
         "violations":
             int(
-                best["Violations"]
+                best["violations"]
             ),
 
         "violations_prevented":
