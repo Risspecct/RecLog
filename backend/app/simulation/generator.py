@@ -16,15 +16,12 @@ from app.simulation.constants import (
 def generate_vehicle_number():
 
     return (
-        "KA"
-        + str(np.random.randint(1, 99)).zfill(2)
-        + "".join(
+        "KA" + str(np.random.randint(1, 99)).zfill(2) + "".join(
             np.random.choice(
                 list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
                 2
             )
-        )
-        + str(
+        ) + str(
             np.random.randint(
                 1000,
                 9999
@@ -117,8 +114,7 @@ def simulate_hotspot(
     for day in range(days):
 
         date = (
-            start_date
-            + timedelta(days=day)
+            start_date + timedelta(days=day)
         )
 
         daily_count = np.random.poisson(
@@ -155,16 +151,14 @@ def simulate_hotspot(
             )
 
             latitude = (
-                center_lat
-                + np.random.normal(
+                center_lat + np.random.normal(
                     0,
                     0.0005
                 )
             )
 
             longitude = (
-                center_lon
-                + np.random.normal(
+                center_lon + np.random.normal(
                     0,
                     0.0005
                 )
@@ -193,8 +187,7 @@ def simulate_hotspot(
             )
 
             if (
-                vehicle_pool
-                and np.random.rand() < 0.20
+                vehicle_pool and np.random.rand() < 0.20
             ):
 
                 vehicle_number = (
@@ -202,9 +195,7 @@ def simulate_hotspot(
                         vehicle_pool
                     )
                 )
-
             else:
-
                 vehicle_number = (
                     generate_vehicle_number()
                 )
