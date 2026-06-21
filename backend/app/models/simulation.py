@@ -20,3 +20,18 @@ class SimulationDashboardResponse(BaseModel):
     current_confidence: float
 
     historical_violations: int
+
+
+class ScenarioResultResponse(BaseModel):
+    scenario: str
+    intervention: str
+
+    projected_pcri: float
+
+    change_pct: float
+
+    impact: str
+
+    confidence: float
+
+    violations: int
