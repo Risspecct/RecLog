@@ -1,10 +1,15 @@
 from fastapi import FastAPI
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.services.data_service import load_dataset
 from app.routes.hotspots import router as hotspot_router
 from app.routes.dashboard import router as dashboard_router
 from app.routes.analytics import router as analytics_router
+from app.routes.copilot import router as copilot_router
+from dotenv import load_dotenv
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -17,11 +22,18 @@ app = FastAPI(
     title="RecLog API",
     version="1.0.0"
 )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(hotspot_router)
 app.include_router(dashboard_router)
 app.include_router(analytics_router)
-
+app.include_router(copilot_router)
 
 @app.on_event("startup")
 def startup():
