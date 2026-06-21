@@ -1,6 +1,8 @@
 from fastapi import APIRouter
 from fastapi import HTTPException
 
+from app.simulation.generator import simulate_hotspot
+from app.services.data_service import get_dataset
 from app.models.simulation import SimulationDashboardRequest, ScenarioResultResponse, BestStrategyResponse, ResourcePlanResponse
 from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention, recommend_resources, test_generator, test_pcri
 
@@ -112,3 +114,38 @@ def test_pcri_endpoint(
         hotspot_name=request.hotspot_name,
         days=request.days
     )
+
+
+@router.get("/test")
+def simulation_test(
+    hotspot_name: str | None = None
+):
+
+    if hotspot_name is None:
+
+        hotspot_name = (
+            get_dataset()
+            .iloc[0]["hotspot_name"]
+        )
+
+    df = simulate_hotspot(
+        hotspot_name=hotspot_name,
+        days=7,
+        scenario="festival",
+        intervention="none"
+    )
+
+    if df is None:
+        return {
+            "error": "Hotspot not found"
+        }
+
+    return {
+        "hotspot": hotspot_name,
+        "generated_rows": len(df),
+        "columns": list(df.columns),
+        "sample": (
+            df.head(5)
+            .to_dict(orient="records")
+        )
+    }
