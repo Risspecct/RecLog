@@ -1,69 +1,27 @@
 from fastapi import APIRouter
-from pydantic import BaseModel
-from groq import Groq  # type: ignore[import]
-import os
 
-router = APIRouter()
+from app.models.copilot import CopilotRequest, CopilotResponse
 
+from app.services.copilot_service import generate_copilot_response
 
-
-class Prompt(BaseModel):
-    query:str
-
-
-@router.post("/copilot")
-def copilot(prompt:Prompt):
-    client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+router = APIRouter(
+    prefix="/copilot",
+    tags=["Copilot"]
 )
 
-    system_prompt = """
 
-You are a Bangalore traffic management expert.
+@router.post(
+    "",
+    response_model=CopilotResponse
+)
+def copilot(
+    request: CopilotRequest
+):
 
-Give deployment recommendations.
-
-Mention:
-
-Priority hotspot
-
-PCRI
-
-Officers required
-
-Tow trucks required
-
-Expected congestion reduction
-
-Reason
-
-Keep answer concise and structured.
-
-"""
-
-    response = client.chat.completions.create(
-
-        model="llama-3.1-8b-instant",
-
-        messages=[
-
-            {
-                "role":"system",
-                "content":system_prompt
-            },
-
-            {
-                "role":"user",
-                "content":prompt.query
-            }
-
-        ]
-
+    answer = generate_copilot_response(
+        request.query
     )
 
-    return {
-
-        "answer":
-        response.choices[0].message.content
-
-    }
+    return CopilotResponse(
+        answer=answer
+    )
