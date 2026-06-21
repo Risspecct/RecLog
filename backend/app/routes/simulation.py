@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from fastapi import HTTPException
 
 from app.models.simulation import SimulationDashboardRequest, ScenarioResultResponse, BestStrategyResponse, ResourcePlanResponse
-from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention, recommend_resources
+from app.services.simulation_service import get_hotspot_for_simulation, scenario_dashboard, best_intervention, recommend_resources, test_generator, test_pcri
 
 router = APIRouter(
     prefix="/simulation",
@@ -91,4 +91,24 @@ def get_resource_plan(
 
     return recommend_resources(
         best.projected_pcri
+    )
+
+@router.post("/test-generator")
+def test_generator_endpoint(
+    request: SimulationDashboardRequest
+):
+
+    return test_generator(
+        hotspot_name=request.hotspot_name,
+        days=request.days
+    )
+
+@router.post("/test-pcri")
+def test_pcri_endpoint(
+    request: SimulationDashboardRequest
+):
+
+    return test_pcri(
+        hotspot_name=request.hotspot_name,
+        days=request.days
     )
