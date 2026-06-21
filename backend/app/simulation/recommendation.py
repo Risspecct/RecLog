@@ -69,3 +69,72 @@ def recommend_resources(
             "tow_trucks": 0,
             "patrol_interval": "4 hours"
         }
+
+
+def best_intervention(
+    dashboard
+):
+
+    interventions = dashboard[
+        dashboard["Intervention"] != "none"
+    ].copy()
+
+    if interventions.empty:
+        return None
+
+    best_idx = interventions[
+        "Projected_PCRI"
+    ].idxmin()
+
+    best = interventions.loc[
+        best_idx
+    ]
+
+    baseline = dashboard[
+        (dashboard["Scenario"] == "festival")
+        &
+        (dashboard["Intervention"] == "none")
+    ].iloc[0]
+
+    violations_prevented = (
+
+        baseline["Violations"]
+
+        -
+
+        best["Violations"]
+
+    )
+
+    return {
+
+        "best_strategy":
+            str(
+                best["Intervention"]
+            ),
+
+        "projected_pcri":
+            float(
+                best["Projected_PCRI"]
+            ),
+
+        "impact":
+            str(
+                best["Impact"]
+            ),
+
+        "confidence":
+            float(
+                best["Confidence"]
+            ),
+
+        "violations":
+            int(
+                best["Violations"]
+            ),
+
+        "violations_prevented":
+            int(
+                violations_prevented
+            )
+    }
