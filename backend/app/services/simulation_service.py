@@ -81,21 +81,24 @@ VIOLATION_LIBRARY = [
     "WRONG PARKING"
 ]
 
-def get_hotspot_for_simulation(
-    hotspot_name: str
-):
+def get_hotspot_for_simulation(hotspot_name: str):
 
     df = get_dataset()
 
     hotspot = df[
-        df["hotspot_name"] == hotspot_name
+        df["hotspot_name"]
+        .astype(str)
+        .str.lower()
+        .str.contains(
+            hotspot_name.lower(),
+            na=False
+        )
     ]
 
     if hotspot.empty:
         return None
 
     return hotspot.iloc[0].to_dict()
-
 
 def generate_dashboard(hotspot_name: str, days: int):
     hotspot = get_hotspot_for_simulation(hotspot_name)
