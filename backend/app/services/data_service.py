@@ -8,7 +8,7 @@ dataset = None
 cluster_dataset = None
 
 
-def load_dataset():
+def load_datasets():
     global dataset, cluster_dataset
     logger.info("Loading hotspot dataset...")
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import logging
 
-from app.services.data_service import load_dataset
+from app.services.data_service import load_datasets
 from app.routes.hotspots import router as hotspot_router
 from app.routes.dashboard import router as dashboard_router
 from app.routes.analytics import router as analytics_router
@@ -28,7 +28,7 @@ app.include_router(simulation_router)
 @app.on_event("startup")
 def startup():
     logger.info("Starting RecLog API")
-    load_dataset()
+    load_datasets()
 
 
 @app.get("/health")

@@ -1,4 +1,4 @@
-from app.services.data_service import get_dataset
+from app.services.data_service import get_dataset, get_cluster_dataset
 
 
 def get_hotspot_for_simulation(hotspot_name: str):
