@@ -1,94 +1,204 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import api from "../services/api";
 
 import {
+  Search,
+  Shield,
+  TrendingUp,
+  BadgeAlert,
+  Brain
+} from "lucide-react";
+
+import {
+  ResponsiveContainer,
   BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
-  ResponsiveContainer
+  CartesianGrid
 } from "recharts";
 
 function SimulatorPage() {
 
-  const [hotspot, setHotspot] = useState("Marathahalli");
+  const [query, setQuery] = useState("");
+  const [hotspot, setHotspot] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const [days, setDays] = useState(7);
 
-  const [scenarios, setScenarios] = useState([]);
+  const [hotspots, setHotspots] = useState([]);
 
+  const [scenarios, setScenarios] = useState([]);
   const [best, setBest] = useState(null);
 
+  // fetch hotspot names once
   useEffect(() => {
+
+    api.get("/hotspots")
+      .then((res) => {
+
+        const names = res.data.map(
+          (item) => item.hotspot_name
+        );
+
+        setHotspots(names);
+
+      })
+      .catch(console.log);
+
+  }, []);
+
+  // fetch simulation results
+  useEffect(() => {
+
+    if (!hotspot) return;
 
     api.post("/simulation/dashboard", {
       hotspot_name: hotspot,
-      days: days
+      days
     })
       .then((res) => setScenarios(res.data))
       .catch(console.log);
 
     api.post("/simulation/best-strategy", {
       hotspot_name: hotspot,
-      days: days
+      days
     })
       .then((res) => setBest(res.data))
       .catch(console.log);
 
   }, [hotspot, days]);
 
-  const graphData = scenarios.map((item) => ({
-    name:
-      item.scenario +
-      "\n" +
-      item.intervention,
+  const filteredHotspots =
+    hotspots.filter((name) =>
+      name.toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 8);
 
+  const graphData = scenarios.map((item) => ({
+    name: `${item.scenario}-${item.intervention}`,
     PCRI: item.projected_pcri
   }));
 
   return (
-
     <div className="bg-slate-100 min-h-screen">
 
       <Sidebar />
 
       <div className="ml-64 p-10">
 
-        <h1 className="text-4xl font-bold mb-2">
+        <h1 className="text-5xl font-bold mb-3">
           Impact Simulator
         </h1>
 
-        <p className="text-slate-500 mb-10">
+        <p className="text-slate-500 mb-10 text-lg">
           Evaluate intervention strategies before deployment
         </p>
 
+
         <div className="bg-white rounded-3xl shadow-sm p-10">
 
-          <div className="flex gap-8 mb-8">
+          {/* TOP SECTION */}
 
-            <div>
+          <div className="flex gap-10 mb-10 items-start">
 
-              <p className="text-slate-500 mb-2">
-                Hotspot
+            {/* SEARCH */}
+
+            <div className="w-[70%] relative">
+
+              <p className="text-slate-500 font-semibold mb-3">
+                Search Hotspot
               </p>
 
-              <select
-                value={hotspot}
-                onChange={(e) => setHotspot(e.target.value)}
-                className="border p-3 rounded-xl"
-              >
-                <option>Marathahalli</option>
-                <option>KR Puram</option>
-                <option>Gandhi Nagar</option>
-              </select>
+              <div className="relative">
+
+                <Search
+                  size={22}
+                  className="absolute left-5 top-5 text-slate-400"
+                />
+
+                <input
+                  type="text"
+                  value={query}
+                  placeholder="Search any locality..."
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  className="
+                  w-full
+                  rounded-3xl
+                  border-2
+                  p-5
+                  pl-14
+                  text-lg
+                  outline-none
+                  "
+                />
+
+              </div>
+
+              {
+
+                showSuggestions &&
+                query.length > 0 &&
+                filteredHotspots.length > 0 &&
+
+                <div
+                  className="
+                  absolute
+                  top-28
+                  w-full
+                  bg-white
+                  rounded-3xl
+                  shadow-xl
+                  max-h-64
+                  overflow-y-auto
+                  z-50
+                  "
+                >
+
+                  {
+
+                    filteredHotspots.map((item, index) => (
+
+                      <div
+                        key={index}
+                        onClick={() => {
+
+                          setHotspot(item);
+                          setQuery(item);
+                          setShowSuggestions(false);
+
+                        }}
+                        className="
+                        p-5
+                        cursor-pointer
+                        hover:bg-slate-100
+                        "
+                      >
+
+                        {item}
+
+                      </div>
+
+                    ))
+
+                  }
+
+                </div>
+
+              }
 
             </div>
 
-            <div>
 
-              <p className="text-slate-500 mb-2">
+            {/* DAYS */}
+
+            <div className="w-[30%]">
+
+              <p className="text-slate-500 font-semibold mb-3">
                 Days
               </p>
 
@@ -97,98 +207,172 @@ function SimulatorPage() {
                 min="1"
                 max="30"
                 value={days}
-                onChange={(e) => setDays(Number(e.target.value))}
+                onChange={(e) =>
+                  setDays(Number(e.target.value))
+                }
+                className="w-full"
               />
 
-              <p className="mt-2">{days} days</p>
+              <h1 className="font-bold text-3xl mt-4">
+
+                {days} Days
+
+              </h1>
 
             </div>
 
           </div>
 
-          {best && (
 
-            <div className="grid grid-cols-4 gap-8">
 
-              <div>
+          {/* CARDS */}
 
-                <p className="text-slate-500">
+          {
+
+            best &&
+
+            <div className="grid grid-cols-4 gap-6 mb-14">
+
+              <div className="bg-indigo-50 rounded-3xl p-6 h-40">
+
+                <Shield className="mb-4 text-indigo-600" />
+
+                <p className="text-slate-500 mb-2">
                   Best Strategy
                 </p>
 
-                <h1 className="font-bold text-xl text-indigo-600">
-                  {best.best_strategy}
+                <h1 className="font-bold text-2xl text-indigo-600 break-words">
+
+                  {
+                    best.best_strategy
+                      .replaceAll("_", " ")
+                  }
+
                 </h1>
 
               </div>
 
-              <div>
 
-                <p className="text-slate-500">
+              <div className="bg-green-50 rounded-3xl p-6 h-40">
+
+                <TrendingUp className="mb-4 text-green-600" />
+
+                <p className="text-slate-500 mb-2">
                   Projected PCRI
                 </p>
 
-                <h1 className="font-bold text-green-600 text-2xl">
+                <h1 className="text-5xl font-bold text-green-600">
+
                   {best.projected_pcri}
+
                 </h1>
 
               </div>
 
-              <div>
 
-                <p className="text-slate-500">
-                  Confidence
-                </p>
+              <div className="bg-red-50 rounded-3xl p-6 h-40">
 
-                <h1 className="font-bold text-2xl">
-                  {best.confidence}%
-                </h1>
+                <BadgeAlert className="mb-4 text-red-500" />
 
-              </div>
+                <p className="text-slate-500 mb-2">
 
-              <div>
-
-                <p className="text-slate-500">
                   Violations Prevented
+
                 </p>
 
-                <h1 className="font-bold text-red-500 text-2xl">
+                <h1 className="text-5xl font-bold text-red-500">
+
                   {best.violations_prevented}
+
+                </h1>
+
+              </div>
+
+
+              <div className="bg-yellow-50 rounded-3xl p-6 h-40">
+
+                <Brain className="mb-4 text-yellow-600" />
+
+                <p className="text-slate-500 mb-2">
+
+                  Confidence
+
+                </p>
+
+                <h1 className="text-5xl font-bold">
+
+                  {best.confidence}%
+
                 </h1>
 
               </div>
 
             </div>
 
-          )}
+          }
 
-          <div className="mt-12">
 
-            <ResponsiveContainer width="100%" height={350}>
 
-              <BarChart data={graphData}>
+          {/* GRAPH */}
 
-                <XAxis dataKey="name" />
+          {
 
-                <YAxis />
+            scenarios.length > 0 &&
 
-                <Tooltip />
+            <>
 
-                <Bar
-                  dataKey="PCRI"
-                  fill="#4F46E5"
-                />
+              <h2 className="text-4xl font-bold mb-6">
 
-              </BarChart>
+                PCRI Comparison
 
-            </ResponsiveContainer>
-            <div className="mt-12">
-
-              <h2 className="text-2xl font-bold mb-6">
-                Scenario Analysis
               </h2>
 
-              <div className="space-y-4">
+              <ResponsiveContainer
+                width="100%"
+                height={400}
+              >
+
+                <BarChart data={graphData}>
+
+                  <CartesianGrid strokeDasharray="3 3" />
+
+                  <XAxis dataKey="name" />
+
+                  <YAxis />
+
+                  <Tooltip />
+
+                  <Bar
+                    dataKey="PCRI"
+                    fill="#4F46E5"
+                  />
+
+                </BarChart>
+
+              </ResponsiveContainer>
+
+            </>
+
+          }
+
+
+
+          {/* SCENARIOS */}
+
+          {
+
+            scenarios.length > 0 &&
+
+            <>
+
+              <h2 className="text-4xl font-bold mt-16 mb-8">
+
+                Scenario Analysis
+
+              </h2>
+
+
+              <div className="space-y-5">
 
                 {
 
@@ -196,66 +380,79 @@ function SimulatorPage() {
 
                     <div
                       key={index}
-                      className="border rounded-2xl p-5 bg-slate-50"
+                      className="
+                      bg-slate-50
+                      rounded-3xl
+                      p-6
+                      shadow-sm
+                      "
                     >
 
-                      <div className="flex justify-between">
+                      <div className="grid grid-cols-4">
 
                         <div>
 
-                          <h2 className="font-bold text-lg">
+                          <h1 className="font-bold text-xl capitalize">
 
                             {item.scenario}
 
-                          </h2>
+                          </h1>
+
+                          <p className="text-slate-500 capitalize">
+
+                            {
+                              item.intervention.replaceAll("_", " ")
+                            }
+
+                          </p>
+
+                        </div>
+
+                        <div>
 
                           <p className="text-slate-500">
 
-                            {item.intervention}
-
-                          </p>
-
-                        </div>
-
-                        <div>
-
-                          <p className="text-sm text-slate-500">
                             PCRI
+
                           </p>
 
-                          <h2 className="text-xl font-bold">
+                          <h1 className="font-bold text-2xl">
 
                             {item.projected_pcri}
 
-                          </h2>
+                          </h1>
 
                         </div>
 
                         <div>
 
-                          <p className="text-sm text-slate-500">
+                          <p className="text-slate-500">
+
                             Impact
+
                           </p>
 
-                          <h2 className="font-bold text-red-500">
+                          <h1 className="font-bold text-red-500">
 
                             {item.impact}
 
-                          </h2>
+                          </h1>
 
                         </div>
 
                         <div>
 
-                          <p className="text-sm text-slate-500">
+                          <p className="text-slate-500">
+
                             Confidence
+
                           </p>
 
-                          <h2 className="font-bold">
+                          <h1 className="font-bold">
 
                             {item.confidence}%
 
-                          </h2>
+                          </h1>
 
                         </div>
 
@@ -269,18 +466,16 @@ function SimulatorPage() {
 
               </div>
 
-            </div>
+            </>
 
-          </div>
+          }
 
         </div>
 
       </div>
 
     </div>
-
   );
-
 }
 
 export default SimulatorPage;

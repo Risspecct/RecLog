@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from app.models.simulation import SimulationDashboardRequest, ScenarioResultResponse, BestStrategyResponse, ResourcePlanResponse
 from app.simulation.dashboard import scenario_dashboard
 from app.simulation.recommendation import best_intervention, recommend_resources
+from app.services.data_service import get_dataset
 
 router = APIRouter(
     prefix="/simulation",
@@ -82,3 +83,21 @@ def get_resource_plan(
     return recommend_resources(
         best["projected_pcri"]
     )
+
+
+@router.get("/hotspots")
+def get_hotspots():
+
+    df = get_dataset()
+
+    hotspots = (
+        df["hotspot_name"]
+        .dropna()
+        .astype(str)
+        .unique()
+        .tolist()
+    )
+
+    hotspots.sort()
+
+    return hotspots
