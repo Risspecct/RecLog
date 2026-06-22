@@ -1,7 +1,13 @@
 from fastapi import APIRouter
 
-from app.models.copilot import CopilotRequest, CopilotResponse
-from app.services.copilot_service import generate_copilot_response
+from app.models.copilot import (
+    CopilotRequest,
+    CopilotResponse
+)
+
+from app.services.copilot_service import (
+    generate_copilot_response
+)
 
 router = APIRouter(
     prefix="/copilot",
@@ -18,7 +24,7 @@ def copilot(
 ):
 
     answer = generate_copilot_response(
-        request.query
+        request.hotspot_name
     )
 
     return CopilotResponse(
