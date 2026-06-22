@@ -2,18 +2,15 @@ import os
 
 from groq import Groq
 
-from app.simulation.simulation_service import (
-    get_hotspot_for_simulation
-)
+from app.simulation.simulation_service import get_hotspot_for_simulation
+from app.simulation.dashboard import scenario_dashboard
+from app.simulation.recommendation import best_intervention, recommend_resources
 
-from app.simulation.dashboard import (
-    scenario_dashboard
-)
+MODEL = "llama-3.1-8b-instant"
 
-from app.simulation.recommendation import (
-    best_intervention,
-    recommend_resources
-)
+SIMULATION_DAYS = 7
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 SYSTEM_PROMPT = """
 You are an AI traffic operations assistant for Bengaluru traffic authorities.
@@ -64,37 +61,57 @@ Rules:
 - Keep the response operational and actionable.
 """
 
+GENERAL_PROMPT = """
+You are an intelligent traffic management assistant.
 
-def generate_copilot_response(
-    hotspot_name: str
-) -> str:
+You answer questions about:
 
-    hotspot = get_hotspot_for_simulation(
-        hotspot_name
+- Traffic congestion
+- Illegal parking
+- Parking violations
+- Enforcement operations
+- Resource allocation
+- Urban mobility
+- Smart city traffic systems
+
+Provide practical and concise explanations.
+
+If a user asks about hotspot simulations or intervention analysis,
+inform them that simulation analysis is available through the
+simulation endpoint.
+"""
+
+
+def generate_llm_response(system_prompt: str, user_prompt: str) -> str:
+    response = client.chat.completions.create(
+        model=MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt
+            },
+            {
+                "role": "user",
+                "content": user_prompt
+            }
+        ]
     )
 
-    if hotspot is None:
-        return "Hotspot not found."
-
-    dashboard = scenario_dashboard(
-        hotspot_name=hotspot_name,
-        days=7
+    return (
+        response
+        .choices[0]
+        .message
+        .content
     )
 
-    print(hotspot_name)
-    if dashboard is None:
-        return "Unable to generate simulation dashboard."
 
-    best = best_intervention(
-        dashboard
-    )
-
-    if best is None:
-        return "Unable to determine a recommended intervention."
-
-    resources = recommend_resources(
-        best["projected_pcri"]
-    )
+def build_simulation_context(
+    hotspot_name,
+    hotspot,
+    dashboard,
+    best,
+    resources
+):
 
     dashboard_summary = "\n".join(
         [
@@ -109,7 +126,7 @@ def generate_copilot_response(
         ]
     )
 
-    context = f"""
+    return f"""
 IMPORTANT
 
 All information required for the analysis is contained below.
@@ -175,29 +192,56 @@ Patrol Interval:
 {resources["patrol_interval"]}
 """
 
-    client = Groq(
-        api_key=os.getenv(
-            "GROQ_API_KEY"
-        )
+
+def generate_copilot_response(
+    hotspot_name: str
+) -> str:
+
+    hotspot = get_hotspot_for_simulation(
+        hotspot_name
     )
 
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT
-            },
-            {
-                "role": "user",
-                "content": context
-            }
-        ]
+    if hotspot is None:
+        return "Hotspot not found."
+
+    dashboard = scenario_dashboard(
+        hotspot_name=hotspot_name,
+        days=SIMULATION_DAYS
     )
 
-    return (
-        response
-        .choices[0]
-        .message
-        .content
+    if dashboard is None:
+        return "Unable to generate simulation dashboard."
+
+    best = best_intervention(
+        dashboard
+    )
+
+    if best is None:
+        return "Unable to determine a recommended intervention."
+
+    resources = recommend_resources(
+        best["projected_pcri"]
+    )
+
+    context = build_simulation_context(
+        hotspot_name=hotspot_name,
+        hotspot=hotspot,
+        dashboard=dashboard,
+        best=best,
+        resources=resources
+    )
+
+    return generate_llm_response(
+        SYSTEM_PROMPT,
+        context
+    )
+
+
+def generate_chat_response(
+    message: str
+) -> str:
+
+    return generate_llm_response(
+        GENERAL_PROMPT,
+        message
     )
