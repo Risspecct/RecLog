@@ -7,7 +7,7 @@
 }
 
 html {
-  font-size: 90%;
+  font-size: 80%;
 }
 
 body{
@@ -16,6 +16,6 @@ body{
 }
 
 #root {
-  zoom: 0.9;
+  zoom: 1.1;
   transform-origin: top center;
 }
