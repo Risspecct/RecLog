@@ -50,15 +50,28 @@ The platform enables authorities to:
 
 ### Traffic Intelligence Dashboard
 
-![Dashboard](images/dashboard.png)
+ <table>
+  <tr>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/b6ce27a2-a962-488f-8997-8ad291ca19b4" alt="Screenshot 2026-06-23 233227" style="width:100%;">
+    </td>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/61eccbaf-2404-48d5-8d41-d1bb6e426637" alt="Screenshot 2026-06-23 233357" style="width:100%;">
+    </td>
+  </tr>
+</table>
+      
 
 *Real-time city-wide traffic monitoring with KPI cards, congestion analytics, root-cause analysis, and live incident feeds.*
 
 ---
 
 ### Geospatial Hotspot Intelligence
+<table>
+<tr><img width="1912" height="900" alt="image" src="https://github.com/user-attachments/assets/b90295f1-fe5e-4f49-ba30-e308c482b847" />
+</tr>
+</table>
 
-![Hotspot Map](images/hotspot-map.png)
 
 *Interactive H3-powered hotspot visualization with PCRI risk scoring and congestion prioritization.*
 
@@ -66,7 +79,8 @@ The platform enables authorities to:
 
 ### AI Traffic Copilot
 
-![AI Copilot](images/copilot.png)
+<img width="1918" height="903" alt="image" src="https://github.com/user-attachments/assets/cc2644e6-2ad0-41ab-b42d-d53a890517ad" />
+
 
 *Natural-language decision support for resource allocation and operational planning.*
 
@@ -74,7 +88,23 @@ The platform enables authorities to:
 
 ### What-If Impact Simulator
 
-![Simulator](images/simulator.png)
+<table>
+  <tr>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/25d04faa-dd23-453b-8c27-9e4fb01ae8bc" alt="Simulator View 1" style="width:100%;">
+    </td>
+    <td width="50%">
+      <img src="https://github.com/user-attachments/assets/c60e27cf-a03d-4706-9c59-75104e9af834" alt="Simulator View 2" style="width:100%;">
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" width="100%">
+      <img src="https://github.com/user-attachments/assets/00a0c163-3832-4bfa-9455-2812ca35ca67" alt="Simulator View 3" style="width:100%;">
+    </td>
+  </tr>
+</table>
+
+
 
 *Evaluate traffic interventions and forecast congestion reduction before deployment.*
 
