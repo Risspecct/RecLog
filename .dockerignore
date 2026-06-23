@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+venv/
+.venv/
+env/
+backend/notebooks/
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+
+# Environment
+.env
