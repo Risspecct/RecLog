@@ -1,7 +1,4 @@
 from dotenv import load_dotenv
-
-load_dotenv()
-
 from fastapi import FastAPI
 import logging
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,6 +9,8 @@ from app.routes.dashboard import router as dashboard_router
 from app.routes.analytics import router as analytics_router
 from app.routes.copilot import router as copilot_router
 from app.routes.simulation import router as simulation_router
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -26,7 +25,7 @@ app = FastAPI(
 )
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173", "https://rec-log.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
