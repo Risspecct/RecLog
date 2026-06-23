@@ -124,7 +124,7 @@ function SimulatorPage() {
 
       <Sidebar />
 
-      <div className="ml-64 p-10">
+      <div className="ml-72 p-10">
 
         <h1 className="text-5xl font-bold mb-3">
 

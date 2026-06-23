@@ -3,10 +3,19 @@
 @import "tailwindcss";
 
 *{
-font-family:'Inter',sans-serif;
+  font-family:'Inter',sans-serif;
+}
+
+html {
+  font-size: 90%;
 }
 
 body{
-margin:0;
-background:#f1f5f9;
+  margin:0;
+  background:#f1f5f9;
+}
+
+#root {
+  zoom: 0.9;
+  transform-origin: top center;
 }

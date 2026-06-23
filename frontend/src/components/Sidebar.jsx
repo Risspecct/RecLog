@@ -12,21 +12,21 @@ function Sidebar(){
 
 return(
 
-<div className="fixed left-0 top-0 w-64 h-screen bg-slate-900 text-white z-50">
+<div className="fixed inset-y-0 left-0 w-72 bg-slate-900 text-white z-50">
 
-<div className="p-8 border-b border-slate-700">
+<div className="p-10 border-b border-slate-700">
 
-<h1 className="text-2xl font-bold">
+<h1 className="text-3xl font-bold">
 RecLog
 </h1>
 
-<p className="text-slate-400 text-sm mt-1">
+<p className="text-slate-400 text-sm mt-2">
 Traffic Intelligence Platform
 </p>
 
 </div>
 
-<div className="mt-10 px-5 space-y-3">
+<div className="mt-12 px-6 space-y-4">
 
 <Link to="/" className="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-800">
   <LayoutDashboard size={20}/>

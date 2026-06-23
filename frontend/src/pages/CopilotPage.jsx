@@ -75,7 +75,7 @@ function CopilotPage() {
 
             <Sidebar />
 
-            <div className="ml-64 p-10">
+            <div className="ml-72 p-10">
 
                 <Navbar
                     title="AI Traffic Copilot"

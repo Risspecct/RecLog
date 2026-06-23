@@ -50,7 +50,7 @@ function Dashboard() {
 
             <Sidebar />
 
-            <div className="ml-64 p-8 overflow-x-hidden">
+            <div className="ml-72 p-8 overflow-x-hidden">
 
                 <Navbar
                     title="Dashboard"
