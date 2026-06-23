@@ -1,270 +1,383 @@
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
-import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
-import { useEffect, useState } from "react";
 import api from "../services/api";
+
+import {
+  MapContainer,
+  TileLayer,
+  CircleMarker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
+
+import { useEffect, useState } from "react";
+
+function ZoomHandler({ setZoom }) {
+  useMapEvents({
+    zoomend(e) {
+      setZoom(e.target.getZoom());
+    },
+  });
+
+  return null;
+}
 
 function MapPage() {
 
-    const [hotspots, setHotspots] = useState([]);
+  const [hotspots, setHotspots] = useState([]);
+  const [filteredHotspots, setFilteredHotspots] = useState([]);
+  const [selectedTier, setSelectedTier] = useState("All");
+  const [zoom, setZoom] = useState(11);
 
-    useEffect(() => {
+  useEffect(() => {
 
-        api
-            .get("/hotspots/top-priority?limit=20")
-            .then((response) => {
+    api
+      .get("/hotspots?limit=500")
+      .then((response) => {
 
-                setHotspots(response.data);
+        setHotspots(response.data);
+        setFilteredHotspots(response.data);
 
-            });
+      })
+      .catch(console.log);
 
-    }, []);
+  }, []);
 
-    return (
+  useEffect(() => {
 
-        <div className="bg-slate-100 min-h-screen">
+    if (selectedTier === "All") {
 
-            <Sidebar />
+      setFilteredHotspots(hotspots);
 
-            <div className="ml-64 p-10">
+    }
 
-                <Navbar
-                    title="Traffic Map"
-                    subtitle="Visualize congestion and enforcement zones"
-                />
+    else {
 
-                <div className="grid grid-cols-4 gap-8 mt-10">
+      setFilteredHotspots(
 
-                    {/* MAP */}
+        hotspots.filter(
+          (spot) =>
+            spot.enforcement_tier === selectedTier
+        )
 
-                    <div className="col-span-3 bg-white rounded-3xl shadow-md overflow-hidden">
+      );
 
-                        <MapContainer
-                            center={[12.9716, 77.5946]}
-                            zoom={11}
-                            style={{ height: "700px" }}
-                        >
+    }
 
-                            <TileLayer
-                                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
+  }, [selectedTier, hotspots]);
 
-                            {
 
-                                hotspots.map((spot) => (
 
-                                    <CircleMarker
-                                        key={spot.h3_cell}
-                                        center={[spot.center_lat, spot.center_lon]}
-                                        radius={10}
-                                        color="red"
-                                        fillOpacity={0.7}
-                                    >
+  function getColor(tier) {
 
-                                        <Popup>
+    switch (tier) {
 
-                                            <div className="space-y-2">
+      case "Critical":
+        return "#ef4444";
 
-                                                <h1 className="font-bold">
+      case "High":
+        return "#f97316";
 
-                                                    {spot.hotspot_name.split(",")[0]}
+      case "Medium":
+        return "#eab308";
 
-                                                </h1>
+      case "Low":
+        return "#22c55e";
 
-                                                <p>
+      default:
+        return "#64748b";
 
-                                                    PCRI :
-                                                    {" "}
-                                                    {spot.PCRI.toFixed(2)}
+    }
 
-                                                </p>
+  }
 
-                                                <p>
 
-                                                    Confidence :
-                                                    {" "}
-                                                    {spot.confidence.toFixed(0)}%
 
-                                                </p>
+  function getRadius(tier) {
 
-                                                <p>
+    let baseRadius = 4;
 
-                                                    Priority Score :
-                                                    {" "}
-                                                    {spot.priority_score.toFixed(1)}
+    if (zoom >= 13)
+      baseRadius = 6;
 
-                                                </p>
+    if (zoom >= 15)
+      baseRadius = 7;
 
-                                                <p>
+    if (tier === "Critical")
+      return baseRadius + 1;
 
-                                                    Tier :
-                                                    {" "}
-                                                    {spot.enforcement_tier}
+    return baseRadius;
 
-                                                </p>
+  }
 
-                                                <p>
 
-                                                    Recommended officers :
-                                                    {" "}
-                                                    {Math.ceil(spot.PCRI / 7)}
 
-                                                </p>
+  return (
 
-                                            </div>
+    <div className="bg-slate-100 min-h-screen">
 
-                                        </Popup>
+      <Sidebar />
 
-                                    </CircleMarker>
+      <div className="ml-64 p-10">
 
-                                ))
+        <Navbar
+          title="Traffic Map"
+          subtitle="Visualize Bengaluru traffic hotspots"
+        />
 
-                            }
 
-                        </MapContainer>
 
-                    </div>
+        {/* FILTER */}
 
+        <div className="bg-white rounded-3xl shadow-sm p-6 mt-8 flex justify-between items-center">
 
-                    {/* SIDE PANEL */}
+          <div>
 
-                    <div className="space-y-6">
+            <h2 className="text-xl font-bold">
 
-                        <div className="bg-white rounded-3xl p-8 shadow-md">
+              Hotspot Filters
 
-                            <h1 className="font-bold text-xl mb-6">
+            </h2>
 
-                                Live Summary
+            <p className="text-slate-500 mt-1">
 
-                            </h1>
+              Select which tier to visualize
 
-                            <div className="space-y-5">
+            </p>
 
-                                <div>
+          </div>
 
-                                    <p className="text-gray-500">
+          <select
 
-                                        Active Hotspots
+            value={selectedTier}
 
-                                    </p>
+            onChange={(e) =>
+              setSelectedTier(e.target.value)
+            }
 
-                                    <h1 className="text-3xl font-bold">
+            className="
+            px-5
+            py-3
+            rounded-2xl
+            border
+            outline-none
+            "
 
-                                        {hotspots.length}
+          >
 
-                                    </h1>
+            <option>All</option>
+            <option>Critical</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
 
-                                </div>
-
-                                <div>
-
-                                    <p className="text-gray-500">
-
-                                        Critical Areas
-
-                                    </p>
-
-                                    <h1 className="text-3xl font-bold text-red-500">
-
-                                        14
-
-                                    </h1>
-
-                                </div>
-
-                                <div>
-
-                                    <p className="text-gray-500">
-
-                                        Avg PCRI
-
-                                    </p>
-
-                                    <h1 className="text-3xl font-bold">
-
-                                        48.5
-
-                                    </h1>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <div className="bg-white rounded-3xl p-8 shadow-md">
-
-                            <h1 className="font-bold text-xl mb-6">
-
-                                Suggested Deployment
-
-                            </h1>
-
-                            <div className="space-y-5">
-
-                                <div>
-
-                                    <h2 className="font-semibold">
-
-                                        KR Puram
-
-                                    </h2>
-
-                                    <p className="text-gray-500">
-
-                                        Deploy 8 officers
-
-                                    </p>
-
-                                </div>
-
-                                <div>
-
-                                    <h2 className="font-semibold">
-
-                                        Gandhi Nagar
-
-                                    </h2>
-
-                                    <p className="text-gray-500">
-
-                                        Deploy 5 officers
-
-                                    </p>
-
-                                </div>
-
-                                <div>
-
-                                    <h2 className="font-semibold">
-
-                                        Marathahalli
-
-                                    </h2>
-
-                                    <p className="text-gray-500">
-
-                                        Deploy 6 officers
-
-                                    </p>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
+          </select>
 
         </div>
 
-    );
+
+
+        {/* MAP + LEGEND */}
+
+        <div className="grid grid-cols-4 gap-8 mt-8">
+
+          {/* MAP */}
+
+          <div className="col-span-3 bg-white rounded-3xl shadow-sm overflow-hidden">
+
+            <MapContainer
+
+              center={[12.9716, 77.5946]}
+              zoom={11}
+              style={{ height: "750px" }}
+
+            >
+
+              <ZoomHandler setZoom={setZoom} />
+
+              <TileLayer
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+
+              {
+
+                filteredHotspots.map((spot) => (
+
+                  <CircleMarker
+
+                    key={spot.h3_cell}
+
+                    center={[
+                      spot.center_lat,
+                      spot.center_lon
+                    ]}
+
+                    radius={getRadius(
+                      spot.enforcement_tier
+                    )}
+
+                    color={getColor(
+                      spot.enforcement_tier
+                    )}
+
+                    fillColor={getColor(
+                      spot.enforcement_tier
+                    )}
+
+                    fillOpacity={0.75}
+
+                    weight={2}
+
+                  >
+
+                    <Popup>
+
+                      <div className="space-y-2 w-64">
+
+                        <h1 className="font-bold text-lg">
+
+                          {
+                            spot.hotspot_name
+                              .split(",")[0]
+                          }
+
+                        </h1>
+
+                        <p>
+
+                          PCRI :
+                          {" "}
+                          {spot.PCRI.toFixed(2)}
+
+                        </p>
+
+                        <p>
+
+                          Priority Score :
+                          {" "}
+                          {spot.priority_score.toFixed(2)}
+
+                        </p>
+
+                        <p>
+
+                          Confidence :
+                          {" "}
+                          {spot.confidence.toFixed(0)}%
+
+                        </p>
+
+                        <p>
+
+                          Tier :
+                          {" "}
+                          {spot.enforcement_tier}
+
+                        </p>
+
+                      </div>
+
+                    </Popup>
+
+                  </CircleMarker>
+
+                ))
+
+              }
+
+            </MapContainer>
+
+          </div>
+
+
+
+          {/* SIDE PANEL */}
+
+          <div className="space-y-6">
+
+            {/* LEGEND */}
+
+            <div className="bg-white rounded-3xl shadow-sm p-8">
+
+              <h1 className="font-bold text-xl mb-7">
+
+                Map Legend
+
+              </h1>
+
+              <div className="space-y-6">
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded-full bg-red-500"></div>
+
+                  <span>Critical Hotspots</span>
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded-full bg-orange-500"></div>
+
+                  <span>High Priority</span>
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded-full bg-yellow-400"></div>
+
+                  <span>Medium Risk</span>
+
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  <div className="w-5 h-5 rounded-full bg-green-500"></div>
+
+                  <span>Low Risk</span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+
+            {/* COUNT CARD */}
+
+            <div className="bg-white rounded-3xl shadow-sm p-8">
+
+              <h1 className="font-bold text-xl mb-5">
+
+                Visible Hotspots
+
+              </h1>
+
+              <h1 className="text-5xl font-bold text-indigo-600">
+
+                {filteredHotspots.length}
+
+              </h1>
+
+              <p className="text-slate-500 mt-3">
+
+                Displayed on map
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  );
 
 }
 
