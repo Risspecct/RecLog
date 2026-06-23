@@ -40,27 +40,64 @@ The platform enables authorities to:
 
 ✅ Generate AI-powered action plans
 
----
+## 📸 Platform Showcase
 
-# 🏗️ System Architecture
+### Traffic Intelligence Dashboard
 
-Traffic Violations Data
-↓
-Spatial Aggregation & Clustering
-↓
-PCRI Risk Engine
-↓
-Hotspot Ranking
-↓
-What-If Simulation Engine
-↓
-Resource Deployment Engine
-↓
-AI Traffic Copilot
-↓
-Operational Recommendations
+![Dashboard](images/dashboard.png)
+
+*Real-time city-wide traffic monitoring with KPI cards, congestion analytics, root-cause analysis, and live incident feeds.*
 
 ---
+
+### Geospatial Hotspot Intelligence
+
+![Hotspot Map](images/hotspot-map.png)
+
+*Interactive H3-powered hotspot visualization with PCRI risk scoring and congestion prioritization.*
+
+---
+
+### AI Traffic Copilot
+
+![AI Copilot](images/copilot.png)
+
+*Natural-language decision support for resource allocation and operational planning.*
+
+---
+
+### What-If Impact Simulator
+
+![Simulator](images/simulator.png)
+
+*Evaluate traffic interventions and forecast congestion reduction before deployment.*
+
+# 🏗️ RecLog Architecture
+
+```mermaid
+flowchart LR
+
+A[Traffic Violations Data] --> B[Data Processing]
+
+B --> C[PCRI Engine]
+
+C --> D[Hotspot Detection]
+C --> E[Dashboard Analytics]
+C --> F[Simulation Engine]
+
+F --> G[Scenario Modelling]
+
+D --> H[Resource Allocation]
+
+G --> I[Explainability Layer]
+H --> I
+
+I --> J[AI Traffic Copilot]
+
+J --> K[Deployment Recommendations]
+
+K --> L[Traffic Authorities]
+```
 
 # 🧠 Priority Congestion Risk Index (PCRI)
 
