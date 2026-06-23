@@ -61,6 +61,7 @@ Rules:
 - Do not include markdown formatting.
 - Do not repeat information unnecessarily.
 - Keep the response operational and actionable.
+- Do not include prompt in the response.
 """
 
 GENERAL_PROMPT = """
@@ -199,13 +200,9 @@ def generate_copilot_response(
     hotspot_name: str
 ) -> str:
 
-    print("COPILOT REQUEST =", hotspot_name)
-
     hotspot = get_hotspot_for_simulation(
         hotspot_name
     )
-
-    print("FOUND HOTSPOT =", hotspot)
 
     if hotspot is None:
         return "Hotspot not found."
