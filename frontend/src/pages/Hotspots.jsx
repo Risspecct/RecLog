@@ -4,6 +4,7 @@ import api from "../services/api";
 import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
+
 function Hotspots() {
 
 const [hotspots,setHotspots]=useState([]);
@@ -28,7 +29,10 @@ return(
 
 <div className="ml-64 p-10">
 
-<Navbar/>
+<Navbar
+title="Hotspots"
+subtitle="Explore and analyze traffic hotspots"
+/>
 
 <div className="bg-white rounded-3xl shadow-sm p-8 mt-10">
 

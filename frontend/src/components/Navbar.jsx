@@ -1,25 +1,28 @@
-function Navbar(){
+function Navbar({
+  title,
+  subtitle
+}) {
 
-    return(
+  return (
 
-        <div className="bg-white h-20 rounded-3xl shadow-sm flex justify-between items-center px-8">
+    <div className="bg-white rounded-3xl p-10 shadow-sm">
 
-            <div>
+      <h1 className="text-5xl font-bold">
 
-                <h1 className="text-3xl font-bold text-slate-800">
-                    Dashboard
-                </h1>
+        {title}
 
-                <p className="text-slate-500 mt-1">
-                    Bangalore Traffic Intelligence Overview
-                </p>
+      </h1>
 
-            </div>
+      <p className="text-slate-500 text-lg mt-2">
 
-        </div>
+        {subtitle}
 
-    )
+      </p>
+
+    </div>
+
+  );
 
 }
 
-export default Navbar
+export default Navbar;

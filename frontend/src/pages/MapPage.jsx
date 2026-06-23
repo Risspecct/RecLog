@@ -28,7 +28,10 @@ function MapPage() {
 
             <div className="ml-64 p-10">
 
-                <Navbar />
+                <Navbar
+                    title="Traffic Map"
+                    subtitle="Visualize congestion and enforcement zones"
+                />
 
                 <div className="grid grid-cols-4 gap-8 mt-10">
 
@@ -37,9 +40,9 @@ function MapPage() {
                     <div className="col-span-3 bg-white rounded-3xl shadow-md overflow-hidden">
 
                         <MapContainer
-                            center={[12.9716,77.5946]}
+                            center={[12.9716, 77.5946]}
                             zoom={11}
-                            style={{height:"700px"}}
+                            style={{ height: "700px" }}
                         >
 
                             <TileLayer
@@ -48,11 +51,11 @@ function MapPage() {
 
                             {
 
-                                hotspots.map((spot)=>(
+                                hotspots.map((spot) => (
 
                                     <CircleMarker
                                         key={spot.h3_cell}
-                                        center={[spot.center_lat,spot.center_lon]}
+                                        center={[spot.center_lat, spot.center_lon]}
                                         radius={10}
                                         color="red"
                                         fillOpacity={0.7}
@@ -104,7 +107,7 @@ function MapPage() {
 
                                                     Recommended officers :
                                                     {" "}
-                                                    {Math.ceil(spot.PCRI/7)}
+                                                    {Math.ceil(spot.PCRI / 7)}
 
                                                 </p>
 

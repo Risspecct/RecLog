@@ -52,11 +52,14 @@ function Dashboard() {
 
             <div className="ml-64 p-8 overflow-x-hidden">
 
-                <Navbar />
+                <Navbar
+                    title="Dashboard"
+                    subtitle="Bangalore Traffic Intelligence Overview"
+                />
 
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-7 mt-10">
-                    
+
 
                     <SummaryCard
                         title="Total Hotspots"
