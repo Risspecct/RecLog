@@ -5,16 +5,18 @@ def get_hotspot_for_simulation(
     hotspot_name: str
 ):
 
-    print("REQUEST:", repr(hotspot_name))
-
     df = get_dataset()
+
+    query = hotspot_name.lower()
 
     hotspot = df[
         df["hotspot_name"]
         .astype(str)
         .str.lower()
-        ==
-        hotspot_name.lower()
+        .apply(
+            lambda x:
+            query in x or x in query
+        )
     ]
 
     if hotspot.empty:

@@ -9,30 +9,30 @@ const [query,setQuery]=useState("");
 const [answer,setAnswer]=useState("");
 const [loading,setLoading]=useState(false);
 
-async function generate(){
+async function generate() {
 
-setLoading(true);
+  setLoading(true);
 
-try{
+  try {
 
-const response = await api.post(
-"/copilot",
-{
-query
-}
-);
+    const response = await api.post(
+      "/copilot/chat",
+      {
+        message: query
+      }
+    );
 
-setAnswer(response.data.answer);
+    setAnswer(response.data.answer);
 
-}
+  }
 
-catch(err){
+  catch (err) {
 
-console.log(err);
+    console.log(err);
 
-}
+  }
 
-setLoading(false);
+  setLoading(false);
 
 }
 
@@ -58,7 +58,7 @@ AI Traffic Copilot
 
 className="w-full border rounded-2xl p-5 h-40"
 
-placeholder="I have 25 officers and 5 tow trucks. Where should I deploy?"
+placeholder="Ask anything about traffic congestion, parking violations, enforcement operations, or resource allocation..."
 
 value={query}
 

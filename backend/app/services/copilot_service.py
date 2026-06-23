@@ -1,6 +1,8 @@
 import os
-
+from dotenv import load_dotenv
 from groq import Groq
+
+load_dotenv()
 
 from app.simulation.simulation_service import get_hotspot_for_simulation
 from app.simulation.dashboard import scenario_dashboard
@@ -197,15 +199,21 @@ def generate_copilot_response(
     hotspot_name: str
 ) -> str:
 
+    print("COPILOT REQUEST =", hotspot_name)
+
     hotspot = get_hotspot_for_simulation(
         hotspot_name
     )
 
+    print("FOUND HOTSPOT =", hotspot)
+
     if hotspot is None:
         return "Hotspot not found."
 
+    actual_hotspot_name = hotspot["hotspot_name"]
+
     dashboard = scenario_dashboard(
-        hotspot_name=hotspot_name,
+        hotspot_name=actual_hotspot_name,
         days=SIMULATION_DAYS
     )
 
@@ -224,7 +232,7 @@ def generate_copilot_response(
     )
 
     context = build_simulation_context(
-        hotspot_name=hotspot_name,
+        hotspot_name=actual_hotspot_name,
         hotspot=hotspot,
         dashboard=dashboard,
         best=best,
